@@ -19,8 +19,13 @@ fun GithubRepositoryBrowserNavHost(
         navController = navController,
         startDestination = homeNavigationRoute,
     ) {
-        homeGraph()
-        detailsRoute()
+        homeGraph(
+            nestedGraphs = {
+                detailsRoute(
+                    navigateBack = { navController.popBackStack() }
+                )
+            }
+        )
     }
 }
 

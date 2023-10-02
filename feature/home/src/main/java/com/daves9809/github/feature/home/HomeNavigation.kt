@@ -1,18 +1,23 @@
 package com.daves9809.github.feature.home
 
-import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import androidx.navigation.navigation
+import com.daves9809.github.feature.home.ui.HomeRoute
 
+const val homeGraphRoute = "home_graph"
 const val homeNavigationRoute = "home_route"
 
-fun NavController.navigateToHome(navOptions: NavOptions? = null) {
-    this.navigate(homeNavigationRoute,navOptions)
-}
-
-fun NavGraphBuilder.homeGraph(){
-    composable(route = homeNavigationRoute){
-        HomeRoute()
+fun NavGraphBuilder.homeGraph(
+    nestedGraphs: NavGraphBuilder.() -> Unit
+){
+    navigation(
+        route = homeGraphRoute,
+        startDestination = homeNavigationRoute
+    ) {
+        composable(route = homeNavigationRoute) {
+            HomeRoute()
+        }
+        nestedGraphs()
     }
 }

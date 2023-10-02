@@ -12,8 +12,8 @@ fun NavController.navigateToDetails(navOptions: NavOptions? = null) {
     this.navigate(detailsNavigationRoute, navOptions)
 }
 
-fun NavGraphBuilder.detailsRoute() {
+fun NavGraphBuilder.detailsRoute(navigateBack: () -> Unit) {
     composable(route = detailsNavigationRoute){
-        DetailsRoute()
+        DetailsRoute(navigateBack = navigateBack)
     }
 }

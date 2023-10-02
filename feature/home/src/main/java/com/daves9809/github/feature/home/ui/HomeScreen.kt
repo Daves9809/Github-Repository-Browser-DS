@@ -12,7 +12,7 @@ import com.daves9809.github.feature.home.viewModel.HomeViewModel
 
 
 @Composable
-internal fun HomeRoute(
+fun HomeRoute(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel()
 ){

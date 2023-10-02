@@ -11,6 +11,7 @@ import com.daves9809.github.feature.details.viewModel.DetailsViewModel
 
 @Composable
 fun DetailsRoute(
+    navigateBack: () -> Unit,
     viewModel: DetailsViewModel = hiltViewModel()
 ){
 
