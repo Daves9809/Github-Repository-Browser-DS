@@ -1,4 +1,4 @@
-package com.daves9809.github.feature.home.ui
+package com.daves9809.github.feature.home
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder

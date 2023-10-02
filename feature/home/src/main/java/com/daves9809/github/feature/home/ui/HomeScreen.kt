@@ -7,7 +7,8 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.daves9809.github.core.designsystem.AppScreen
-import com.daves9809.github.feature.home.ui.viewModel.HomeViewModel
+import com.daves9809.github.feature.home.viewModel.HomeState
+import com.daves9809.github.feature.home.viewModel.HomeViewModel
 
 
 @Composable
