@@ -47,6 +47,7 @@ ktlint = "11.3.1"
 org-jetbrains-kotlin-android = "1.9.0"
 junit = "1.1.5"
 material = "1.9.0" # https://github.com/JLLeitschuh/ktlint-gradle/releases
+apollo3 = "3.8.2"
 
 [libraries]
 accompanist-flowlayout = { group = "com.google.accompanist", name = "accompanist-flowlayout", version.ref = "accompanist" }
@@ -117,6 +118,7 @@ room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
+apollo3 = {group = "com.apollographql.apollo3", name = "apollo-runtime", version.ref = "apollo3"}
 
 # Dependencies of the included build-logic
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
@@ -136,3 +138,4 @@ secrets = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugi
 junit5 = { id = "de.mannodermaus.android-junit5", version.ref = "junit5-plugin" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin-android" }
+apollo-graph-ql = { id = "com.apollographql.apollo3", version.ref = "apollo3" }
