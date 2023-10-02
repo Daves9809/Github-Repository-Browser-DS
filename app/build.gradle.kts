@@ -1,13 +1,15 @@
 @file:Suppress("UnstableApiUsage", "UNUSED_VARIABLE")
 
 plugins {
-    id("android.application")
-    id("android.application.compose")
-    id("android.hilt")
-    alias(libs.plugins.junit5)
+    id("github.android.application")
+    id("github.android.application.compose")
+    id("github.android.hilt")
 }
 
 android {
+    buildFeatures {
+        buildConfig = true
+    }
     defaultConfig {
         applicationId = "com.daves9809.github"
         versionCode = getVersionCode()
@@ -46,35 +48,24 @@ android {
 }
 
 dependencies {
+    implementation(project(":feature:home"))
+    implementation(project(":feature:details"))
+
+    implementation(project(":core:common"))
+    implementation(project(":core:designsystem"))
+    implementation(project(":core:model"))
+
+    androidTestImplementation(kotlin("test"))
+    androidTestImplementation(project(":core:testing"))
+
     implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.compose.runtime)
-    implementation(libs.androidx.lifecycle.runtimeCompose)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.ui.tooling.preview)
-    debugImplementation(libs.androidx.compose.ui.tooling)
-    implementation(libs.androidx.compose.material3.windowSizeClass)
-    debugImplementation(libs.androidx.compose.ui.testManifest)
-    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.junit4)
+    implementation(libs.androidx.test.ext)
     implementation(libs.androidx.navigation.compose)
-    implementation(libs.timber)
 
-    testImplementation(libs.junit5.api)
-    testRuntimeOnly(libs.junit5.engine)
-
-    androidTestImplementation(libs.androidx.test.ext)
-    androidTestImplementation(libs.androidx.test.espresso.core)
-    androidTestImplementation(libs.androidx.compose.ui.test)
-}
-
-// androidx.test is forcing JUnit, 4.12. This forces it to use 4.13
-configurations.configureEach {
-    resolutionStrategy {
-        force(libs.junit4)
-        // Temporary workaround for https://issuetracker.google.com/174733673
-        force("org.objenesis:objenesis:2.6")
-    }
+    debugImplementation(libs.androidx.compose.ui.tooling)
 }
 
 val checkReleaseVersion by tasks.registering {
@@ -87,13 +78,5 @@ val checkReleaseVersion by tasks.registering {
                         "For example: git tag -a 1.0.0 -m 'tag message'"
             )
         }
-    }
-}
-
-tasks.whenTaskAdded {
-    if (name.contains("assemble") &&
-        name.contains("Release")
-    ) {
-        dependsOn(checkReleaseVersion)
     }
 }

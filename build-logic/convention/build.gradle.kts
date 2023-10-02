@@ -33,35 +33,31 @@ dependencies {
 gradlePlugin {
     plugins {
         register("androidApplicationCompose") {
-            id = "android.application.compose"
+            id = "github.android.application.compose"
             implementationClass = "plugin.AndroidApplicationComposeConventionPlugin"
         }
         register("androidApplication") {
-            id = "android.application"
+            id = "github.android.application"
             implementationClass = "plugin.AndroidApplicationConventionPlugin"
         }
-        register("androidApplicationJacoco") {
-            id = "android.application.jacoco"
-            implementationClass = "plugin.AndroidApplicationJacocoConventionPlugin"
-        }
         register("androidLibraryCompose") {
-            id = "android.library.compose"
+            id = "github.android.library.compose"
             implementationClass = "plugin.AndroidLibraryComposeConventionPlugin"
         }
+        register("androidFeature") {
+            id = "github.android.feature"
+            implementationClass = "plugin.AndroidFeatureConventionPlugin"
+        }
         register("androidLibrary") {
-            id = "android.library"
+            id = "github.android.library"
             implementationClass = "plugin.AndroidLibraryConventionPlugin"
         }
-        register("androidLibraryJacoco") {
-            id = "android.library.jacoco"
-            implementationClass = "plugin.AndroidLibraryJacocoConventionPlugin"
-        }
         register("androidTest") {
-            id = "android.test"
+            id = "github.android.test"
             implementationClass = "plugin.AndroidTestConventionPlugin"
         }
         register("androidHilt") {
-            id = "android.hilt"
+            id = "github.android.hilt"
             implementationClass = "plugin.AndroidHiltConventionPlugin"
         }
     }

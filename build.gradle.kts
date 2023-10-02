@@ -13,6 +13,8 @@ plugins {
     alias(libs.plugins.hilt) apply false
     alias(libs.plugins.secrets) apply false
     alias(libs.plugins.ktlint) apply false
+    alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.org.jetbrains.kotlin.android) apply false
 }
 
 subprojects {

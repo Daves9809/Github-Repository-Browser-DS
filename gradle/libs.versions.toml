@@ -6,7 +6,7 @@ androidxActivity = "1.7.1" # https://developer.android.com/jetpack/androidx/rele
 androidxAppCompat = "1.6.1" # https://developer.android.com/jetpack/androidx/releases/appcompat
 androidxBrowser = "1.5.0" # https://developer.android.com/jetpack/androidx/releases/browser
 androidxComposeBom = "2023.04.01" # https://maven.google.com/web/index.html?q=compose-bom#androidx.compose:compose-bom
-androidxComposeCompiler = "1.4.6" # https://developer.android.com/jetpack/androidx/releases/compose
+androidxComposeCompiler = "1.5.0" # https://developer.android.com/jetpack/androidx/releases/compose
 androidxComposeRuntimeTracing = "1.0.0-alpha03" # https://developer.android.com/jetpack/androidx/releases/compose-runtime
 androidxCore = "1.10.0" # https://developer.android.com/jetpack/androidx/releases/core
 androidxCoreSplashscreen = "1.0.1" # https://developer.android.com/jetpack/androidx/releases/core
@@ -30,7 +30,6 @@ coil = "2.2.2" # https://github.com/coil-kt/coil/releases
 hilt = "2.46" # https://github.com/google/dagger/releases
 androidxHiltNavigationCompose = "1.0.0" # https://developer.android.com/jetpack/androidx/releases/hilt
 hiltExt = "1.0.0" # https://developer.android.com/jetpack/androidx/releases/hilt
-jacoco = "0.8.8" # https://github.com/jacoco/jacoco/releases
 junit4 = "4.13.2"
 kotlin = "1.8.20" # https://github.com/JetBrains/kotlin/releases
 kotlinxCoroutines = "1.6.4" # https://github.com/Kotlin/kotlinx.coroutines/releases
@@ -44,7 +43,10 @@ turbine = "0.12.1" # https://github.com/cashapp/turbine/releases
 junit5 = "5.9.2" # https://github.com/junit-team/junit5/releases
 junit5-plugin = "1.8.2.1" # https://github.com/mannodermaus/android-junit5/releases
 timber = "5.0.1" # https://github.com/JakeWharton/timber/releases
-ktlint = "11.3.1" # https://github.com/JLLeitschuh/ktlint-gradle/releases
+ktlint = "11.3.1"
+org-jetbrains-kotlin-android = "1.9.0"
+junit = "1.1.5"
+material = "1.9.0" # https://github.com/JLLeitschuh/ktlint-gradle/releases
 
 [libraries]
 accompanist-flowlayout = { group = "com.google.accompanist", name = "accompanist-flowlayout", version.ref = "accompanist" }
@@ -119,6 +121,8 @@ timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "tim
 # Dependencies of the included build-logic
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
 kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+junit = { group = "androidx.test.ext", name = "junit", version.ref = "junit" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
@@ -131,3 +135,4 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 secrets = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secrets" }
 junit5 = { id = "de.mannodermaus.android-junit5", version.ref = "junit5-plugin" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
+org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin-android" }

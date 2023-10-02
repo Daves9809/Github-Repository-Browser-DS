@@ -5,8 +5,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.daves9809.github.ui.greeting.greetingGraph
-import com.daves9809.github.ui.greeting.greetingRoute
+import com.daves9809.github.feature.home.ui.homeGraph
+import com.daves9809.github.feature.home.ui.homeNavigationRoute
 
 @Composable
 fun GithubRepositoryBrowserNavHost(
@@ -16,9 +16,9 @@ fun GithubRepositoryBrowserNavHost(
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = greetingRoute,
+        startDestination = homeNavigationRoute,
     ) {
-        greetingGraph()
+        homeGraph()
     }
 }
 

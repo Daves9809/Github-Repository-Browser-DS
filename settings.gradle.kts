@@ -16,3 +16,12 @@ dependencyResolutionManagement {
 }
 rootProject.name = "GithubRepositoryBrowser"
 include(":app")
+include(":feature:home")
+include(":feature:details")
+include(":core:datastore")
+include(":core:data")
+include(":core:domain")
+include(":core:model")
+include(":core:common")
+include(":core:testing")
+include(":core:designsystem")
