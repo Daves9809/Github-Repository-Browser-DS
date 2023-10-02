@@ -1,0 +1,23 @@
+query RepositoryListQuery($userLogin: String!, $first: Int!, $after: String) {
+    user(login: $userLogin) @nonnull{
+        repositories(first: $first, after: $after) {
+            totalCount
+            edges {
+                cursor
+                node @nonnull{
+                    ...repositoryFields
+                }
+            }
+        }
+    }
+}
+
+fragment repositoryFields on Repository {
+    description
+    createdAt
+    id
+    name
+    stargazers(first: 0) {
+        totalCount
+    }
+}

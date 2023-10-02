@@ -1,0 +1,21 @@
+query RepositoryDetailsQuery($login: String!,$repositoryName: String!) {
+    user(login: $login) {
+        repository(name: $repositoryName) {
+            createdAt
+            description
+            name
+            issues {
+                totalCount
+            }
+            defaultBranchRef {
+                target {
+                    ... on Commit {
+                        history {
+                            totalCount
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

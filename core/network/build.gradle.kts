@@ -3,6 +3,7 @@ plugins {
     id("github.android.hilt")
     id("kotlinx-serialization")
     alias(libs.plugins.secrets)
+    alias(libs.plugins.apollo.graph.ql)
 }
 
 android {
@@ -26,5 +27,11 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlinx.datetime)
+    implementation(libs.apollo3)
+}
 
+apollo {
+    service("service") {
+        packageName.set("com.daves9809.github.core.network")
+    }
 }
