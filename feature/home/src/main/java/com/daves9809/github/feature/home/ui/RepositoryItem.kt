@@ -73,7 +73,8 @@ fun previewRepositoryItem() {
         RepositoryItem(
             name = "Now in Android",
             description = "Simple repository",
-            stargazers = 7130
+            stargazers = 7130,
+            onNavigateToRepositoryDetails = {}
         )
     }
 }

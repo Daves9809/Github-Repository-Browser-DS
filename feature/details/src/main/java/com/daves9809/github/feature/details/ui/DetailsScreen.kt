@@ -25,6 +25,10 @@ fun DetailsScreen(
     uiState: DetailsState
 ){
     AppScreen {
-        Text(text = "Details Screen")
+        Text(text = uiState.username)
+        Text(text = uiState.repositoryName)
+        Text(text = "description = ${uiState.description}")
+        Text(text = "commitCount = ${uiState.commitCount}")
+        Text(text = "issuesCount = ${uiState.issuesCount}")
     }
 }
