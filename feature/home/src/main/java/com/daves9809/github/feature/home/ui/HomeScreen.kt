@@ -31,6 +31,7 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
 import com.daves9809.github.core.designsystem.theme.Dimens
+import com.daves9809.github.core.model.navigation.RepositoryDetailsNavArgs
 import com.daves9809.github.core.model.remote.repositoryList.RepositoryListItem
 import com.daves9809.github.feature.home.R
 import com.daves9809.github.feature.home.viewModel.RequestState
@@ -38,7 +39,8 @@ import com.daves9809.github.feature.home.viewModel.RequestState
 
 @Composable
 fun HomeRoute(
-    viewModel: HomeViewModel = hiltViewModel()
+    viewModel: HomeViewModel = hiltViewModel(),
+    navigateToRepositoryDetails: (RepositoryDetailsNavArgs) -> Unit
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val repositories = uiState.repositories.collectAsLazyPagingItems()
@@ -46,7 +48,10 @@ fun HomeRoute(
     val screenActions = HomeScreenActions(
         onUsernameTextChange = viewModel::onUsernameTextChange,
         onSearchSelected = viewModel::onSearchSelected,
-        onSearchStateChange = viewModel::onSearchStateChange
+        onSearchStateChange = viewModel::onSearchStateChange,
+        onNavigateToRepositoryDetails = { username, repositoryName ->
+            navigateToRepositoryDetails(RepositoryDetailsNavArgs(username, repositoryName))
+        }
     )
 
     HomeScreen(
@@ -72,7 +77,10 @@ fun HomeScreen(
             onSearchStateChange = screenActions.onSearchStateChange
         )
         Spacer(modifier = Modifier.height(Dimens.margin))
-        RepositoryList(repositories)
+        RepositoryList(repositories,
+            onNavigateToRepositoryDetails = { repositoryName ->
+                screenActions.onNavigateToRepositoryDetails(uiState.username, repositoryName)
+            })
         if (repositories.loadState.append == LoadState.Loading && uiState.requestState != RequestState.INIT) {
             CircularProgressIndicator()
         }
@@ -80,7 +88,10 @@ fun HomeScreen(
 }
 
 @Composable
-private fun RepositoryList(repositories: LazyPagingItems<RepositoryListItem>) {
+private fun RepositoryList(
+    repositories: LazyPagingItems<RepositoryListItem>,
+    onNavigateToRepositoryDetails: (String) -> Unit
+) {
     LazyColumn {
         items(
             count = repositories.itemCount,
@@ -90,7 +101,8 @@ private fun RepositoryList(repositories: LazyPagingItems<RepositoryListItem>) {
             RepositoryItem(
                 name = repository?.name ?: "",
                 description = repository?.description ?: "",
-                stargazers = repository?.stargazers ?: 0
+                stargazers = repository?.stargazers ?: 0,
+                onNavigateToRepositoryDetails = onNavigateToRepositoryDetails
             )
             Spacer(modifier = Modifier.height(8.dp))
         }
@@ -106,7 +118,7 @@ private fun SearchBar(
     onUsernameTextChange: (String) -> Unit,
     onSearchSelected: () -> Unit,
     onSearchStateChange: (Boolean) -> Unit
-){
+) {
 
     SearchBar(
         query = username,

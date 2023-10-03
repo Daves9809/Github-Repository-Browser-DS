@@ -1,5 +1,6 @@
 package com.daves9809.github.feature.home.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,11 +24,15 @@ import com.daves9809.github.core.designsystem.AppScreen
 fun RepositoryItem(
     name: String,
     description: String,
-    stargazers: Int
+    stargazers: Int,
+    onNavigateToRepositoryDetails: (String) -> Unit
 ) {
     Card(
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .clickable {
+                onNavigateToRepositoryDetails(name)
+            },
         elevation = CardDefaults.cardElevation()
     ) {
         Row(

@@ -32,11 +32,11 @@ class HomeViewModel @Inject constructor(
     internal val state: StateFlow<HomeState> = _state
 
     fun onUsernameTextChange(username: String) {
-        _state.update { it.copy(username = username) }
+        _state.update { it.copy(username = username.trim()) }
     }
 
     fun onSearchSelected() {
-        val usernameQuery = state.value.username.trim()
+        val usernameQuery = state.value.username
         _state.update {
             it.copy(
                 isSearchActive = false,
@@ -55,7 +55,7 @@ class HomeViewModel @Inject constructor(
     private fun addUsernameToHistory(){
         with(state.value){
             if (username.isNotBlank()){
-                _state.update { it.copy(usernameHistory = it.usernameHistory.plus(username.trim())) }
+                _state.update { it.copy(usernameHistory = it.usernameHistory.plus(username)) }
             }
         }
     }

@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.daves9809.github.feature.details.detailsRoute
+import com.daves9809.github.feature.details.navigateToDetails
 import com.daves9809.github.feature.home.homeGraph
 import com.daves9809.github.feature.home.homeGraphRoute
 import com.daves9809.github.feature.home.homeNavigationRoute
@@ -21,6 +22,9 @@ fun GithubRepositoryBrowserNavHost(
         startDestination = homeGraphRoute,
     ) {
         homeGraph(
+            navigateToRepositoryDetails = { repositoryDetailsNavArgs ->
+                navController.navigateToDetails(repositoryDetailsNavArgs)
+            },
             nestedGraphs = {
                 detailsRoute(
                     navigateBack = { navController.popBackStack() }
