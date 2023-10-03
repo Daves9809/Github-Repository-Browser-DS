@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="details_screen_icon_public">Public icon</string>
+    <string name="details_screen_icon_private">Private icon</string>
+    <string name="details_screen_icon_avatar">Avatar icon</string>
+    <string name="details_screen_icon_commits">Commits icon</string>
+    <string name="details_screen_icon_issues">Issues icon</string>
+    <string name="details_screen_text_public">Public</string>
+    <string name="details_screen_text_private">Private</string>
+    <string name="details_screen_text_commits">commits</string>
+    <string name="details_screen_text_issues">issues</string>
+    <string name="details_scren_text_details">Details</string>
+    <string name="details_screen_icon_go_back">Go back</string>
+</resources>

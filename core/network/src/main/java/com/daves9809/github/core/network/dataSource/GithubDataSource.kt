@@ -48,7 +48,10 @@ class GithubDataSourceImpl @Inject constructor(
             description = repository?.description ?: "",
             issuesCount = repository?.issues?.totalCount ?: 0,
             commitCount = repository?.defaultBranchRef?.target?.onCommit?.history?.totalCount ?: 0,
-            name = repository?.name ?: ""
+            name = repository?.name ?: "",
+            openGraphUrl = repository?.openGraphImageUrl.toString() ?: "",
+            ownerImageUrl = repository?.owner?.avatarUrl.toString() ?: "",
+            isPrivate = repository?.visibility?.toString().equals("PRIVATE")
         )
     }
 

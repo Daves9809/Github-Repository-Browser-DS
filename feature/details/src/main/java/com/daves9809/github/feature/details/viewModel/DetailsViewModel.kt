@@ -48,7 +48,10 @@ class DetailsViewModel @Inject constructor(
                 it.copy(
                     description = result.description,
                     issuesCount = result.issuesCount,
-                    commitCount = result.commitCount
+                    commitCount = result.commitCount,
+                    openGraphUrl = result.openGraphUrl,
+                    ownerImageUrl = result.ownerImageUrl,
+                    isPrivate = result.isPrivate
                 )
             }
         }

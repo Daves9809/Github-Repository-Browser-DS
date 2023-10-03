@@ -16,6 +16,11 @@ query RepositoryDetailsQuery($login: String!,$repositoryName: String!) {
                     }
                 }
             }
+            openGraphImageUrl
+            owner {
+                avatarUrl
+            }
+            visibility
         }
     }
 }

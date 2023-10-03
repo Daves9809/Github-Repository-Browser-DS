@@ -6,5 +6,7 @@ data class DetailsState(
     val description: String = "",
     val issuesCount: Int = 0,
     val commitCount: Int = 0,
-    val openGraphUrl: String = ""
+    val openGraphUrl: String = "",
+    val ownerImageUrl: String = "",
+    val isPrivate: Boolean = false
 )

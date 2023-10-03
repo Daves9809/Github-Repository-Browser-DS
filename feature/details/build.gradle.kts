@@ -15,4 +15,5 @@ dependencies {
 
     implementation(libs.timber)
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.coil.kt.compose)
 }

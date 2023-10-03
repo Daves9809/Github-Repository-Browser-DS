@@ -5,5 +5,8 @@ data class RepositoryDetailsItem(
     val createdAt: String,
     val description: String,
     val issuesCount: Int,
-    val commitCount: Int
+    val commitCount: Int,
+    val openGraphUrl: String,
+    val ownerImageUrl: String,
+    val isPrivate: Boolean
 )
