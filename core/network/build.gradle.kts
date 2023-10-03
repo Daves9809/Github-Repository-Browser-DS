@@ -28,10 +28,12 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlinx.datetime)
     implementation(libs.apollo3)
+    implementation(libs.paging)
 }
 
 apollo {
     service("service") {
         packageName.set("com.daves9809.github.core.network")
+        generateOptionalOperationVariables.set(false)
     }
 }

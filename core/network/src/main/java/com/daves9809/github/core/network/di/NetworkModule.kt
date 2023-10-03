@@ -5,6 +5,9 @@ import com.daves9809.github.core.network.BuildConfig
 import com.daves9809.github.core.network.common.Constant
 import com.daves9809.github.core.network.common.Constant.HEADER_AUTHORIZATION
 import com.daves9809.github.core.network.common.Constant.HEADER_AUTHORIZATION_BEARER
+import com.daves9809.github.core.network.dataSource.GithubDataSource
+import com.daves9809.github.core.network.dataSource.GithubDataSourceImpl
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -32,5 +35,11 @@ object NetworkModule {
                 value = "$HEADER_AUTHORIZATION_BEARER ${BuildConfig.PAT}"
             )
             .build()
+    }
+
+    @Binds
+    @Singleton
+    fun provideGithubDataSource(apolloClient: ApolloClient): GithubDataSource{
+        return GithubDataSourceImpl(apolloClient)
     }
 }
