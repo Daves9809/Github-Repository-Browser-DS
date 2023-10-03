@@ -5,8 +5,9 @@ import com.daves9809.github.core.model.remote.repositoryDetails.RepositoryDetail
 import com.daves9809.github.core.model.remote.repositoryList.RepositoryListItem
 import com.daves9809.github.core.network.dataSource.GithubDataSource
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class GithubRepositoryImpl(
+class GithubRepositoryImpl @Inject constructor(
     private val githubDataSource: GithubDataSource
 ) : GithubRepository {
     override fun getRepositoryList(username: String): Flow<PagingData<RepositoryListItem>> =

@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.daves9809.github.feature.details.detailsRoute
 import com.daves9809.github.feature.home.homeGraph
+import com.daves9809.github.feature.home.homeGraphRoute
 import com.daves9809.github.feature.home.homeNavigationRoute
 
 @Composable
@@ -17,7 +18,7 @@ fun GithubRepositoryBrowserNavHost(
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = homeNavigationRoute,
+        startDestination = homeGraphRoute,
     ) {
         homeGraph(
             nestedGraphs = {

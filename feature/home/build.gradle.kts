@@ -9,10 +9,12 @@ android {
 
 dependencies {
     implementation(project(":core:model"))
-    implementation(project(":core:domain"))
     implementation(project(":core:common"))
     implementation(project(":core:data"))
 
     implementation(libs.timber)
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.paging)
+    implementation(libs.paging.compose)
 }
