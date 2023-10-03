@@ -36,17 +36,27 @@ class HomeViewModel @Inject constructor(
     }
 
     fun onSearchSelected() {
+        val usernameQuery = state.value.username.trim()
         _state.update {
             it.copy(
                 isSearchActive = false,
-                repositories = repository.getRepositoryList(username = state.value.username)
+                repositories = repository.getRepositoryList(username = usernameQuery)
                     .cachedIn(viewModelScope),
                 requestState = RequestState.INITIATED
             )
         }
+        addUsernameToHistory()
     }
 
     fun onSearchStateChange(isActive: Boolean) {
         _state.update { it.copy(isSearchActive = isActive) }
+    }
+
+    private fun addUsernameToHistory(){
+        with(state.value){
+            if (username.isNotBlank()){
+                _state.update { it.copy(usernameHistory = it.usernameHistory.plus(username.trim())) }
+            }
+        }
     }
 }

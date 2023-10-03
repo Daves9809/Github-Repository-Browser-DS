@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.emptyFlow
 
 data class HomeState(
     val username: String = "",
+    val usernameHistory: Set<String> = emptySet(),
     val isSearchActive: Boolean = false,
     val repositories: Flow<PagingData<RepositoryListItem>> = emptyFlow(),
     val requestState: RequestState = RequestState.INIT

@@ -2,5 +2,6 @@
 <resources>
     <string name="home_screen_icon_search">Search icon</string>
     <string name="home_screen_icon_close">Close icon</string>
+    <string name="home_screen_icon_history">History Icon</string>
     <string name="home_screen_text_search_user">Search User</string>
 </resources>
