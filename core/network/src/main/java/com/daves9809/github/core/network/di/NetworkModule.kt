@@ -36,10 +36,13 @@ object NetworkModule {
             )
             .build()
     }
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+interface DataSourceModule{
 
     @Binds
     @Singleton
-    fun provideGithubDataSource(apolloClient: ApolloClient): GithubDataSource{
-        return GithubDataSourceImpl(apolloClient)
-    }
+    fun provideGithubDataSource(githubDataSourceImpl: GithubDataSourceImpl): GithubDataSource
 }
