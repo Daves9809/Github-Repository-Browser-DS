@@ -2,6 +2,7 @@ package com.daves9809.github.feature.details.ui
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -217,7 +218,9 @@ private fun GraphImage(imageUrl: String) {
         model = imageUrl,
         contentDescription = null,
         loading = {
-            CircularProgressIndicator()
+            Box(contentAlignment = Alignment.Center){
+                CircularProgressIndicator(modifier = Modifier.size(50.dp))
+            }
         })
 }
 
