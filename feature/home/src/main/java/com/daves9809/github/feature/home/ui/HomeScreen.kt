@@ -3,17 +3,25 @@ package com.daves9809.github.feature.home.ui
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -23,7 +31,10 @@ import com.daves9809.github.core.designsystem.AppScreen
 import com.daves9809.github.feature.home.viewModel.HomeState
 import com.daves9809.github.feature.home.viewModel.HomeViewModel
 import androidx.compose.material3.SearchBar
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
@@ -61,28 +72,54 @@ fun HomeRoute(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     uiState: HomeState,
     repositories: LazyPagingItems<RepositoryListItem>,
     screenActions: HomeScreenActions
 ) {
-    AppScreen {
-        SearchBar(
-            username = uiState.username,
-            isSearchActive = uiState.isSearchActive,
-            usernameHistory = uiState.usernameHistory,
-            onUsernameTextChange = screenActions.onUsernameTextChange,
-            onSearchSelected = screenActions.onSearchSelected,
-            onSearchStateChange = screenActions.onSearchStateChange
-        )
-        Spacer(modifier = Modifier.height(Dimens.margin))
-        RepositoryList(repositories,
-            onNavigateToRepositoryDetails = { repositoryName ->
-                screenActions.onNavigateToRepositoryDetails(uiState.username, repositoryName)
-            })
-        if (repositories.loadState.append == LoadState.Loading && uiState.requestState != RequestState.INIT) {
-            CircularProgressIndicator()
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+    Scaffold(
+        modifier = Modifier
+            .fillMaxSize()
+            .windowInsetsPadding(WindowInsets.safeDrawing)
+            .nestedScroll(scrollBehavior.nestedScrollConnection),
+        topBar = {
+            if (!uiState.isSearchActive)
+                CenterAlignedTopAppBar(
+                    title = { Text(text = "Repositories") },
+                    actions = {
+                        IconButton(onClick = { screenActions.onSearchStateChange(true) }) {
+                            Icon(
+                                imageVector = Icons.Default.Search,
+                                contentDescription = "Search icon"
+                            )
+                        }
+                    },
+                    scrollBehavior = scrollBehavior
+                )
+            else
+                SearchBar(
+                    username = uiState.username,
+                    isSearchActive = uiState.isSearchActive,
+                    usernameHistory = uiState.usernameHistory,
+                    onUsernameTextChange = screenActions.onUsernameTextChange,
+                    onSearchSelected = screenActions.onSearchSelected,
+                    onSearchStateChange = screenActions.onSearchStateChange
+                )
+        }
+    ) { paddingValues ->
+        AppScreen(
+            modifier = Modifier.padding(paddingValues)
+        ) {
+            RepositoryList(repositories,
+                onNavigateToRepositoryDetails = { repositoryName ->
+                    screenActions.onNavigateToRepositoryDetails(uiState.username, repositoryName)
+                })
+            if (repositories.loadState.append == LoadState.Loading && uiState.requestState != RequestState.INIT) {
+                CircularProgressIndicator()
+            }
         }
     }
 }

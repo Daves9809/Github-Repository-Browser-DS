@@ -34,7 +34,7 @@ fun AppScreen(
         Column(
             Modifier
                 .fillMaxSize()
-                .padding(screenPadding)
+                .padding(horizontal = screenPadding)
                 .windowInsetsPadding(windowInsetsPadding),
             horizontalAlignment = horizontalAlignment,
             verticalArrangement = verticalArrangement,
