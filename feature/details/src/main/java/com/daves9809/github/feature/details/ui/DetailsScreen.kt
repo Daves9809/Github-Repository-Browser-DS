@@ -14,8 +14,10 @@ import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Public
@@ -84,7 +86,11 @@ fun DetailsScreen(
             )
         }
     ) { paddingValues ->
-        AppScreen(modifier = Modifier.padding(paddingValues)) {
+        AppScreen(
+            modifier = Modifier
+                .padding(top = paddingValues.calculateTopPadding())
+                .verticalScroll(state = rememberScrollState())
+        ) {
             GraphImage(imageUrl = uiState.openGraphUrl)
             Spacer(modifier = Modifier.padding(16.dp))
             OwnerInfo(
@@ -218,7 +224,7 @@ private fun GraphImage(imageUrl: String) {
         model = imageUrl,
         contentDescription = null,
         loading = {
-            Box(contentAlignment = Alignment.Center){
+            Box(contentAlignment = Alignment.Center) {
                 CircularProgressIndicator(modifier = Modifier.size(50.dp))
             }
         })

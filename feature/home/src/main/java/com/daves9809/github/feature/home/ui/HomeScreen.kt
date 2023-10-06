@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Search
@@ -22,38 +21,34 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.daves9809.github.core.designsystem.AppScreen
-import com.daves9809.github.feature.home.viewModel.HomeState
-import com.daves9809.github.feature.home.viewModel.HomeViewModel
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
+import com.daves9809.github.core.designsystem.AppScreen
 import com.daves9809.github.core.designsystem.SnackbarRounded
-import com.daves9809.github.core.designsystem.theme.Dimens
 import com.daves9809.github.core.model.navigation.RepositoryDetailsNavArgs
 import com.daves9809.github.core.model.remote.repositoryList.RepositoryListItem
 import com.daves9809.github.feature.home.R
+import com.daves9809.github.feature.home.viewModel.HomeState
+import com.daves9809.github.feature.home.viewModel.HomeViewModel
 import com.daves9809.github.feature.home.viewModel.RequestState
-import kotlinx.coroutines.launch
-import timber.log.Timber
 
 
 @Composable
@@ -88,7 +83,6 @@ fun HomeScreen(
     screenActions: HomeScreenActions
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
-    val coroutineScope = rememberCoroutineScope()
 
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     Scaffold(
