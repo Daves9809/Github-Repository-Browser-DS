@@ -1,6 +1,7 @@
 package com.daves9809.github.core.network.di
 
 import com.apollographql.apollo3.ApolloClient
+import com.apollographql.apollo3.network.http.LoggingInterceptor
 import com.daves9809.github.core.network.BuildConfig
 import com.daves9809.github.core.network.common.Constant
 import com.daves9809.github.core.network.common.Constant.HEADER_AUTHORIZATION
@@ -13,6 +14,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
+import okhttp3.OkHttpClient
 import javax.inject.Singleton
 
 @Module
@@ -34,6 +36,7 @@ object NetworkModule {
                 name = HEADER_AUTHORIZATION,
                 value = "$HEADER_AUTHORIZATION_BEARER ${BuildConfig.PAT}"
             )
+            .addHttpInterceptor(LoggingInterceptor(LoggingInterceptor.Level.BODY))
             .build()
     }
 }

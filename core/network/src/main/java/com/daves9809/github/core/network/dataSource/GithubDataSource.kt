@@ -12,6 +12,7 @@ import com.daves9809.github.core.network.RepositoryDetailsQuery
 import com.daves9809.github.core.network.RepositoryListQuery
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import timber.log.Timber
 import javax.inject.Inject
 
 class GithubDataSourceImpl @Inject constructor(
@@ -40,9 +41,14 @@ class GithubDataSourceImpl @Inject constructor(
         username: String,
         repositoryName: String
     ): RepositoryDetailsItem {
-        val repository =  apolloClient.query(RepositoryDetailsQuery(username, repositoryName))
+
+        val query =  apolloClient.query(RepositoryDetailsQuery(username, repositoryName))
             .execute()
-            .data?.user?.repository
+        val repository = query.data?.user?.repository
+        if (query.hasErrors()){
+            Timber.e("Error = ${query.errors}")
+        }
+
         return RepositoryDetailsItem(
             createdAt = repository?.createdAt.toString() ?: "",
             description = repository?.description ?: "",

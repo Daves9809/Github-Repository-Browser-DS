@@ -31,8 +31,13 @@ import com.daves9809.github.core.designsystem.AppScreen
 import com.daves9809.github.feature.home.viewModel.HomeState
 import com.daves9809.github.feature.home.viewModel.HomeViewModel
 import androidx.compose.material3.SearchBar
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
@@ -41,11 +46,14 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
+import com.daves9809.github.core.designsystem.SnackbarRounded
 import com.daves9809.github.core.designsystem.theme.Dimens
 import com.daves9809.github.core.model.navigation.RepositoryDetailsNavArgs
 import com.daves9809.github.core.model.remote.repositoryList.RepositoryListItem
 import com.daves9809.github.feature.home.R
 import com.daves9809.github.feature.home.viewModel.RequestState
+import kotlinx.coroutines.launch
+import timber.log.Timber
 
 
 @Composable
@@ -79,8 +87,18 @@ fun HomeScreen(
     repositories: LazyPagingItems<RepositoryListItem>,
     screenActions: HomeScreenActions
 ) {
+    val snackbarHostState = remember { SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
+
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     Scaffold(
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState) { snackbarData ->
+                SnackbarRounded(
+                    message = snackbarData.visuals.message,
+                    onClick = { snackbarData.dismiss() })
+            }
+        },
         modifier = Modifier
             .fillMaxSize()
             .windowInsetsPadding(WindowInsets.safeDrawing)
@@ -111,14 +129,24 @@ fun HomeScreen(
         }
     ) { paddingValues ->
         AppScreen(
-            modifier = Modifier.padding(paddingValues)
+            modifier = Modifier.padding(top = paddingValues.calculateTopPadding())
         ) {
-            RepositoryList(repositories,
+            RepositoryList(
+                modifier = Modifier.weight(1f),
+                repositories = repositories,
                 onNavigateToRepositoryDetails = { repositoryName ->
                     screenActions.onNavigateToRepositoryDetails(uiState.username, repositoryName)
                 })
             if (repositories.loadState.append == LoadState.Loading && uiState.requestState != RequestState.INIT) {
                 CircularProgressIndicator()
+            }
+            if (repositories.loadState.refresh is LoadState.Error) {
+                LaunchedEffect(key1 = Unit) {
+                    snackbarHostState.showSnackbar(
+                        "Error occurred: " +
+                                "${(repositories.loadState.refresh as LoadState.Error).error.message}"
+                    )
+                }
             }
         }
     }
@@ -126,10 +154,11 @@ fun HomeScreen(
 
 @Composable
 private fun RepositoryList(
+    modifier: Modifier = Modifier,
     repositories: LazyPagingItems<RepositoryListItem>,
     onNavigateToRepositoryDetails: (String) -> Unit
 ) {
-    LazyColumn {
+    LazyColumn(modifier) {
         items(
             count = repositories.itemCount,
             key = repositories.itemKey { it.id }
