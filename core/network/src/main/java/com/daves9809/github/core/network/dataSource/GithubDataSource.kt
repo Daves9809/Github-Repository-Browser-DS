@@ -10,6 +10,8 @@ import com.daves9809.github.core.model.remote.repositoryDetails.RepositoryDetail
 import com.daves9809.github.core.model.remote.repositoryList.RepositoryListItem
 import com.daves9809.github.core.network.RepositoryDetailsQuery
 import com.daves9809.github.core.network.RepositoryListQuery
+import com.daves9809.github.core.network.mapper.toRepositoryDetailsItem
+import com.daves9809.github.core.network.mapper.toRepositoryListItem
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import timber.log.Timber
@@ -27,12 +29,7 @@ class GithubDataSourceImpl @Inject constructor(
         ).flow
             .map { data ->
                 data.map { item ->
-                    RepositoryListItem(
-                        description = item.repositoryFields.description ?: "",
-                        id = item.repositoryFields.id,
-                        name = item.repositoryFields.name,
-                        stargazers = item.repositoryFields.stargazers.totalCount
-                    )
+                    item.toRepositoryListItem()
                 }
             }
     }
@@ -47,19 +44,7 @@ class GithubDataSourceImpl @Inject constructor(
                 .execute()
             val repository = query.data?.user?.repository
 
-            Result.success(
-                RepositoryDetailsItem(
-                    createdAt = repository?.createdAt.toString() ?: "",
-                    description = repository?.description ?: "",
-                    issuesCount = repository?.issues?.totalCount ?: 0,
-                    commitCount = repository?.defaultBranchRef?.target?.onCommit?.history?.totalCount
-                        ?: 0,
-                    name = repository?.name ?: "",
-                    openGraphUrl = repository?.openGraphImageUrl.toString() ?: "",
-                    ownerImageUrl = repository?.owner?.avatarUrl.toString() ?: "",
-                    isPrivate = repository?.visibility?.toString().equals("PRIVATE")
-                )
-            )
+            Result.success(repository?.toRepositoryDetailsItem() ?: RepositoryDetailsItem())
         } catch (e: Exception) {
             return Result.failure(e)
         }
