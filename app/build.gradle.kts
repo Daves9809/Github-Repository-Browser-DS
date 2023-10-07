@@ -56,7 +56,6 @@ dependencies {
     implementation(project(":core:model"))
 
     androidTestImplementation(kotlin("test"))
-    androidTestImplementation(project(":core:testing"))
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material3)
