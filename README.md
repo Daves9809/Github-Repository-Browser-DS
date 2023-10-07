@@ -11,4 +11,4 @@ $ git clone https://github.com/Daves9809/Github-Repository-Browser-DS
 PAT = "your_github_personal_access_token" 
 
 ##  How the app works
-<img src="./gifs/app_behavior" width="70%" height="70%">
+<img src="./gifs/app_behavior.gif" width="70%" height="70%">
