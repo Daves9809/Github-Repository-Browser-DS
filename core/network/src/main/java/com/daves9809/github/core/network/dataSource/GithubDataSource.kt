@@ -40,25 +40,29 @@ class GithubDataSourceImpl @Inject constructor(
     override suspend fun getRepositoryDetails(
         username: String,
         repositoryName: String
-    ): RepositoryDetailsItem {
+    ): Result<RepositoryDetailsItem> {
 
-        val query =  apolloClient.query(RepositoryDetailsQuery(username, repositoryName))
-            .execute()
-        val repository = query.data?.user?.repository
-        if (query.hasErrors()){
-            Timber.e("Error = ${query.errors}")
+        return try {
+            val query = apolloClient.query(RepositoryDetailsQuery(username, repositoryName))
+                .execute()
+            val repository = query.data?.user?.repository
+
+            Result.success(
+                RepositoryDetailsItem(
+                    createdAt = repository?.createdAt.toString() ?: "",
+                    description = repository?.description ?: "",
+                    issuesCount = repository?.issues?.totalCount ?: 0,
+                    commitCount = repository?.defaultBranchRef?.target?.onCommit?.history?.totalCount
+                        ?: 0,
+                    name = repository?.name ?: "",
+                    openGraphUrl = repository?.openGraphImageUrl.toString() ?: "",
+                    ownerImageUrl = repository?.owner?.avatarUrl.toString() ?: "",
+                    isPrivate = repository?.visibility?.toString().equals("PRIVATE")
+                )
+            )
+        } catch (e: Exception) {
+            return Result.failure(e)
         }
-
-        return RepositoryDetailsItem(
-            createdAt = repository?.createdAt.toString() ?: "",
-            description = repository?.description ?: "",
-            issuesCount = repository?.issues?.totalCount ?: 0,
-            commitCount = repository?.defaultBranchRef?.target?.onCommit?.history?.totalCount ?: 0,
-            name = repository?.name ?: "",
-            openGraphUrl = repository?.openGraphImageUrl.toString() ?: "",
-            ownerImageUrl = repository?.owner?.avatarUrl.toString() ?: "",
-            isPrivate = repository?.visibility?.toString().equals("PRIVATE")
-        )
     }
 
 }
@@ -68,5 +72,5 @@ interface GithubDataSource {
     suspend fun getRepositoryDetails(
         username: String,
         repositoryName: String
-    ): RepositoryDetailsItem
+    ): Result<RepositoryDetailsItem>
 }

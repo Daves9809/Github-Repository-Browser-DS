@@ -1,6 +1,7 @@
 package com.daves9809.github.feature.home.ui
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -31,6 +32,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
@@ -41,6 +43,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
+import com.daves9809.github.core.common.RequestState
 import com.daves9809.github.core.designsystem.AppScreen
 import com.daves9809.github.core.designsystem.SnackbarRounded
 import com.daves9809.github.core.model.navigation.RepositoryDetailsNavArgs
@@ -48,7 +51,7 @@ import com.daves9809.github.core.model.remote.repositoryList.RepositoryListItem
 import com.daves9809.github.feature.home.R
 import com.daves9809.github.feature.home.viewModel.HomeState
 import com.daves9809.github.feature.home.viewModel.HomeViewModel
-import com.daves9809.github.feature.home.viewModel.RequestState
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -83,8 +86,21 @@ fun HomeScreen(
     screenActions: HomeScreenActions
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
 
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+
+    val loadState = repositories.loadState.refresh
+    val requestState = uiState.requestState
+    LaunchedEffect(key1 = loadState) {
+        if (loadState is LoadState.Error)
+            coroutineScope.launch {
+                snackbarHostState.showSnackbar(
+                    "Error : ${(repositories.loadState.refresh as LoadState.Error).error.message}"
+                )
+            }
+    }
+
     Scaffold(
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState) { snackbarData ->
@@ -100,12 +116,12 @@ fun HomeScreen(
         topBar = {
             if (!uiState.isSearchActive)
                 CenterAlignedTopAppBar(
-                    title = { Text(text = "Repositories") },
+                    title = { Text(text = stringResource(R.string.home_screen_text_repositories)) },
                     actions = {
                         IconButton(onClick = { screenActions.onSearchStateChange(true) }) {
                             Icon(
                                 imageVector = Icons.Default.Search,
-                                contentDescription = "Search icon"
+                                contentDescription = stringResource(R.string.home_screen_search_icon)
                             )
                         }
                     },
@@ -125,21 +141,22 @@ fun HomeScreen(
         AppScreen(
             modifier = Modifier.padding(top = paddingValues.calculateTopPadding())
         ) {
-            RepositoryList(
-                modifier = Modifier.weight(1f),
-                repositories = repositories,
-                onNavigateToRepositoryDetails = { repositoryName ->
-                    screenActions.onNavigateToRepositoryDetails(uiState.username, repositoryName)
-                })
-            if (repositories.loadState.append == LoadState.Loading && uiState.requestState != RequestState.INIT) {
-                CircularProgressIndicator()
-            }
-            if (repositories.loadState.refresh is LoadState.Error) {
-                LaunchedEffect(key1 = Unit) {
-                    snackbarHostState.showSnackbar(
-                        "Error occurred: " +
-                                "${(repositories.loadState.refresh as LoadState.Error).error.message}"
-                    )
+            if (loadState is LoadState.Loading && requestState == RequestState.Loading) {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator()
+                }
+            } else {
+                RepositoryList(
+                    modifier = Modifier.weight(1f),
+                    repositories = repositories,
+                    onNavigateToRepositoryDetails = { repositoryName ->
+                        screenActions.onNavigateToRepositoryDetails(
+                            uiState.username,
+                            repositoryName
+                        )
+                    })
+                if (repositories.loadState.append == LoadState.Loading && uiState.requestState != RequestState.Init) {
+                    CircularProgressIndicator()
                 }
             }
         }

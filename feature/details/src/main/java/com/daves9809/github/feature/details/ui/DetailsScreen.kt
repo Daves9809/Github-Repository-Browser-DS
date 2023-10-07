@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -31,13 +32,19 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -46,10 +53,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import coil.compose.SubcomposeAsyncImage
+import com.daves9809.github.core.common.RequestState
 import com.daves9809.github.core.designsystem.AppScreen
+import com.daves9809.github.core.designsystem.SnackbarRounded
 import com.daves9809.github.feature.details.R
 import com.daves9809.github.feature.details.viewModel.DetailsState
 import com.daves9809.github.feature.details.viewModel.DetailsViewModel
+import kotlinx.coroutines.launch
 
 @Composable
 fun DetailsRoute(
@@ -59,16 +69,40 @@ fun DetailsRoute(
 
     val uiState by viewModel.state.collectAsStateWithLifecycle()
 
-    DetailsScreen(navigateBack = navigateBack, uiState = uiState)
+    DetailsScreen(
+        navigateBack = navigateBack,
+        uiState = uiState,
+        resetErrorState = viewModel::resetErrorState
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailsScreen(
     navigateBack: () -> Unit,
+    resetErrorState: () -> Unit,
     uiState: DetailsState
 ) {
+    val snackbarHostState = remember { SnackbarHostState() }
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+
+    val requestState = uiState.requestState
+    LaunchedEffect(key1 = requestState) {
+        if (requestState is RequestState.Error) {
+            coroutineScope.launch {
+                snackbarHostState.showSnackbar(requestState.errorMessage.asString(context))
+            }
+        }
+    }
     Scaffold(
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState) { snackbarData ->
+                SnackbarRounded(
+                    message = snackbarData.visuals.message,
+                    onClick = { snackbarData.dismiss() })
+            }
+        },
         modifier = Modifier
             .windowInsetsPadding(WindowInsets.safeDrawing),
         topBar = {
@@ -86,24 +120,29 @@ fun DetailsScreen(
             )
         }
     ) { paddingValues ->
-        AppScreen(
-            modifier = Modifier
-                .padding(top = paddingValues.calculateTopPadding())
-                .verticalScroll(state = rememberScrollState())
-        ) {
-            GraphImage(imageUrl = uiState.openGraphUrl)
-            Spacer(modifier = Modifier.padding(16.dp))
-            OwnerInfo(
-                uiState.username,
-                uiState.ownerImageUrl
-            )
-            Spacer(modifier = Modifier.padding(8.dp))
-            TitleAndDescription(uiState.repositoryName, uiState.description)
-            Spacer(modifier = Modifier.padding(8.dp))
-            PrivateRepository(uiState.isPrivate)
-            Spacer(modifier = Modifier.padding(8.dp))
-            CommitsAndIssues(uiState.commitCount, uiState.issuesCount)
-        }
+        if (requestState is RequestState.Loading) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
+            }
+        } else
+            AppScreen(
+                modifier = Modifier
+                    .padding(top = paddingValues.calculateTopPadding())
+                    .verticalScroll(state = rememberScrollState())
+            ) {
+                GraphImage(imageUrl = uiState.openGraphUrl)
+                Spacer(modifier = Modifier.padding(16.dp))
+                OwnerInfo(
+                    uiState.username,
+                    uiState.ownerImageUrl
+                )
+                Spacer(modifier = Modifier.padding(8.dp))
+                TitleAndDescription(uiState.repositoryName, uiState.description)
+                Spacer(modifier = Modifier.padding(8.dp))
+                PrivateRepository(uiState.isPrivate)
+                Spacer(modifier = Modifier.padding(8.dp))
+                CommitsAndIssues(uiState.commitCount, uiState.issuesCount)
+            }
     }
 }
 
@@ -235,6 +274,7 @@ private fun GraphImage(imageUrl: String) {
 fun previewDetailsScreen() {
     AppScreen {
         DetailsScreen(
+            {},
             {},
             uiState = DetailsState(
                 username = "Daves9809",

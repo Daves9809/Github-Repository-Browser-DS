@@ -4,4 +4,6 @@
     <string name="home_screen_icon_close">Close icon</string>
     <string name="home_screen_icon_history">History Icon</string>
     <string name="home_screen_text_search_user">Search User</string>
+    <string name="home_screen_text_repositories">Repositories</string>
+    <string name="home_screen_search_icon">Search icon</string>
 </resources>

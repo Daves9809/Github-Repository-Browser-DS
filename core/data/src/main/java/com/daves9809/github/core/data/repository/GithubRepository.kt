@@ -17,7 +17,7 @@ class GithubRepositoryImpl @Inject constructor(
     override suspend fun getRepositoryDetails(
         username: String,
         repositoryName: String
-    ): RepositoryDetailsItem =
+    ): Result<RepositoryDetailsItem> =
         githubDataSource.getRepositoryDetails(username,repositoryName)
 
 
@@ -26,5 +26,5 @@ class GithubRepositoryImpl @Inject constructor(
 interface GithubRepository {
     fun getRepositoryList(username: String): Flow<PagingData<RepositoryListItem>>
 
-    suspend fun getRepositoryDetails(username: String, repositoryName: String): RepositoryDetailsItem
+    suspend fun getRepositoryDetails(username: String, repositoryName: String): Result<RepositoryDetailsItem>
 }
